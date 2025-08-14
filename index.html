@@ -11,7 +11,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
     <!-- Chosen Palette: Neutral Base with Thematic Accents -->
     <!-- Application Structure Plan: A three-tab single-page application. 1) A neutral landing tab "Kontext & Daten" provides shared context with a population chart and a comparative timeline. 2) The "Arabische Gewalt" tab details events from that perspective using a green accent color. 3) The "Jüdische Gewalt" tab details events from that perspective using a red accent color. This structure was chosen to directly fulfill the user's request for a comparative view, allowing users to switch between perspectives while maintaining a shared factual baseline, thus facilitating a more nuanced understanding of the conflict's escalation. -->
-    <!-- Visualization & Content Choices: 1. Population Data -> Goal: Show demographic context -> Viz: Line Chart -> Interaction: Hover -> Justification: Best for showing change over time. 2. Comparative Timeline -> Goal: Compare chronology of escalations -> Viz: Two-sided HTML/CSS timeline -> Interaction: Scroll -> Justification: Direct visual comparison of events. 3. 1929 Unrest/Irgun Attacks -> Goal: Show scale of specific campaigns -> Viz: Donut/Bar Charts -> Interaction: Hover -> Justification: Appropriate chart types for part-to-whole and magnitude comparisons. 4. Massacres/Case Studies -> Goal: Detail key events -> Viz: Card grid with modals -> Interaction: Click -> Justification: Keeps UI clean while providing deep-dive details. -->
+    <!-- Visualization & Content Choices: 1. Population Data -> Goal: Show demographic context -> Viz: Line Chart -> Interaction: Hover -> Justification: Best for showing change over time. 2. Comparative Timeline -> Goal: Compare chronology of escalations -> Viz: Two-sided HTML/CSS timeline -> Interaction: Click to open modal -> Justification: Direct visual comparison of events, with deep-dive details on demand. 3. 1929 Unrest/Irgun Attacks -> Goal: Show scale of specific campaigns -> Viz: Donut/Bar Charts -> Interaction: Hover -> Justification: Appropriate chart types for part-to-whole and magnitude comparisons. 4. Massacres/Case Studies -> Goal: Detail key events -> Viz: Card grid with modals -> Interaction: Click -> Justification: Keeps UI clean while providing deep-dive details. -->
     <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
     <style>
         body {
@@ -35,11 +35,30 @@
         .prose h3 { color: #1C1917; }
         .prose p { line-height: 1.7; }
         .prose strong { color: #1C1917; }
-        .timeline-item::before { content: ''; position: absolute; top: 1rem; width: 1rem; height: 1rem; border-radius: 9999px; border: 3px solid #d6d3d1; background-color: #f5f5f4; }
-        .timeline-item-arab::before { left: -0.5rem; }
-        .timeline-item-jewish::before { right: -0.5rem; }
-        .timeline-item-arab { border-left-color: #059669; }
-        .timeline-item-jewish { border-right-color: #DC2626; }
+        .timeline-item {
+            padding-bottom: 2.5rem;
+        }
+        .timeline-item::before { 
+            content: ''; 
+            position: absolute; 
+            top: 0.5rem; 
+            width: 1rem; 
+            height: 1rem; 
+            border-radius: 9999px; 
+            border: 3px solid #d6d3d1; /* stone-300 */
+            background-color: #f5f5f4; /* stone-100 */
+            z-index: 10;
+        }
+        /* Mobile first: all items are left aligned */
+        .timeline-item::before {
+            left: -0.5rem;
+        }
+        /* Desktop: split timeline */
+        @media (min-width: 640px) {
+            .timeline-item-arab::before { left: -0.5rem; }
+            .timeline-item-jewish::before { right: -0.5rem; }
+            .timeline-item-context::before { left: calc(50% - 0.5rem); background-color: #a8a29e; border-color: #78716c; } /* stone-400 / stone-500 */
+        }
     </style>
 </head>
 <body class="antialiased">
@@ -63,10 +82,21 @@
                 <p class="text-lg sm:text-xl text-stone-600 max-w-4xl mx-auto">Eine vergleichende Analyse der Gewalt in Palästina, 1900–1948</p>
             </section>
 
+            <section class="prose max-w-4xl mx-auto mb-16">
+                <h2 class="text-3xl font-bold text-stone-800 text-center">Der unversöhnliche Konflikt zweier Nationalbewegungen</h2>
+                <p>Der Konflikt in Palästina war im Kern die Kollision zweier nationaler Bewegungen – des jüdischen Zionismus und des palästinensischen Arabismus – die denselben Landstrich für sich beanspruchten. Dieser Konflikt wurde nicht primär durch uralten religiösen Hass angetrieben, sondern durch moderne, säkulare nationalistische Bestrebungen, die sich im späten 19. und frühen 20. Jahrhundert formierten.</p>
+                <p>Die Situation wurde durch die Geopolitik nach dem Ersten Weltkrieg und den Zusammenbruch des Osmanischen Reiches dramatisch verschärft. Großbritannien, die neue Mandatsmacht, gab beiden Seiten widersprüchliche Versprechungen:</p>
+                <ul>
+                    <li><strong>Für die zionistische Bewegung:</strong> Die <strong>Balfour-Deklaration von 1917</strong> versprach die Errichtung einer "nationalen Heimstätte für das jüdische Volk" in Palästina.</li>
+                    <li><strong>Für die Araber:</strong> Die Korrespondenz zwischen McMahon und Hussein (1915-16) schien die arabische Unabhängigkeit in der Region zu versprechen als Gegenleistung für ihre Unterstützung gegen das Osmanische Reich.</li>
+                </ul>
+                <p>Das britische Mandat war von Anfang an mit diesem unlösbaren Widerspruch belastet. Die Briten versuchten, eine Politik des "doppelten Verpflichtung" zu verfolgen, was in der Praxis bedeutete, dass sie versuchten, beide Seiten zu beschwichtigen, aber letztendlich keine zufriedenstellten. Ihre Politik, die jüdische Einwanderung und den Landerwerb zu erleichtern und gleichzeitig die Rechte der arabischen Bevölkerung zu schützen, scheiterte. Die Mandatszeit war geprägt von einem zunehmenden Kreislauf aus arabischen Aufständen gegen die britische Politik und die zionistische Präsenz, gefolgt von britischer Unterdrückung und einer wachsenden Militarisierung der zionistischen Bewegung, die sich nicht mehr auf den britischen Schutz verlassen wollte oder konnte.</p>
+            </section>
+
             <section id="demographics" class="mb-20 py-10">
                 <div class="text-center mb-12">
                     <h2 class="text-3xl font-bold text-stone-800">Demografischer Wandel als Konfliktherd</h2>
-                    <p class="mt-2 text-lg text-stone-600 max-w-3xl mx-auto">Die zionistische Einwanderung veränderte die demografische Landschaft Palästinas und schuf die Grundlage für den nationalen Konflikt.</p>
+                    <p class="mt-2 text-lg text-stone-600 max-w-3xl mx-auto">Die zionistische Einwanderung veränderte die demografische Landschaft Palästinas drastisch und schuf die Grundlage für den nationalen Konflikt. Innerhalb von 65 Jahren wuchs der jüdische Anteil an der Gesamtbevölkerung von unter 10 % auf über 30 %.</p>
                 </div>
                 <div class="chart-container bg-white p-4 rounded-lg shadow-md">
                     <canvas id="populationChart"></canvas>
@@ -76,43 +106,82 @@
             <section id="timeline" class="mb-12 py-10">
                 <div class="text-center mb-16">
                     <h2 class="text-3xl font-bold text-stone-800">Zeitleiste der Eskalation</h2>
-                    <p class="mt-2 text-lg text-stone-600 max-w-3xl mx-auto">Eine chronologische Gegenüberstellung zentraler Gewaltereignisse von beiden Seiten.</p>
+                    <p class="mt-2 text-lg text-stone-600 max-w-3xl mx-auto">Eine chronologische Gegenüberstellung zentraler politischer und gewaltsamer Ereignisse. Klicken Sie auf ein Ereignis für Details.</p>
                 </div>
-                <div class="relative max-w-4xl mx-auto">
-                    <div class="absolute left-1/2 top-0 h-full w-0.5 bg-stone-300"></div>
+                <div class="relative max-w-5xl mx-auto">
+                    <div class="absolute left-1/2 top-0 h-full w-0.5 bg-stone-300 hidden sm:block"></div>
+                    <div class="absolute left-0 top-0 h-full w-0.5 bg-stone-300 sm:hidden"></div>
                     <!-- Timeline Items -->
-                    <div class="timeline-item timeline-item-arab relative w-1/2 py-4 pr-8 text-right border-l-4 border-transparent">
-                        <h4 class="font-bold">1920: Nabi-Musa-Unruhen</h4><p class="text-sm">Pogrom in Jerusalem, 5 Juden getötet.</p>
+                    <div class="timeline-item timeline-item-context relative sm:w-full py-4 sm:text-center">
+                        <div class="sm:pl-10 sm:w-1/2 sm:mx-auto">
+                            <button onclick="openModal('timeline-balfour')" class="text-left sm:text-center w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                                <h4 class="font-bold text-lg text-stone-600">1917: Balfour-Deklaration</h4>
+                            </button>
+                        </div>
                     </div>
-                    <div class="timeline-item timeline-item-arab relative w-1/2 ml-auto py-4 pr-8 text-right border-l-4 border-transparent">
-                        <h4 class="font-bold">1921: Jaffa-Unruhen</h4><p class="text-sm">Pogrom in Jaffa, 47 Juden getötet.</p>
+                    <div class="timeline-item timeline-item-arab relative sm:w-1/2 py-4 sm:pr-10 sm:text-right">
+                        <button onclick="openModal('timeline-nabi-musa')" class="text-left sm:text-right w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-emerald-700">1920: Nabi-Musa-Unruhen</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-arab relative w-1/2 ml-auto py-4 pr-8 text-right border-l-4 border-transparent">
-                        <h4 class="font-bold">1929: Landesweite Unruhen</h4><p class="text-sm">133 Juden getötet, inkl. Massaker von Hebron.</p>
+                    <div class="timeline-item timeline-item-arab relative sm:w-1/2 py-4 sm:pr-10 sm:text-right">
+                         <button onclick="openModal('timeline-unruhen1929')" class="text-left sm:text-right w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-emerald-700">1929: Landesweite Unruhen</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-jewish relative w-1/2 ml-auto py-4 pl-8 text-left border-r-4 border-transparent">
-                        <h4 class="font-bold">1937-39: Irgun-Terrorkampagne</h4><p class="text-sm">Serie von Bombenanschlägen auf arabische Zivilisten.</p>
+                     <div class="timeline-item timeline-item-jewish relative sm:w-1/2 sm:ml-auto py-4 sm:pl-10 text-left">
+                        <button onclick="openModal('timeline-irgun')" class="text-left w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-red-700">1931: Gründung der Irgun</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-arab relative w-1/2 py-4 pr-8 text-right border-l-4 border-transparent">
-                        <h4 class="font-bold">1936-39: Arabischer Aufstand</h4><p class="text-sm">Guerillakrieg, ~400 jüdische Opfer.</p>
+                    <div class="timeline-item timeline-item-arab relative sm:w-1/2 py-4 sm:pr-10 sm:text-right">
+                        <button onclick="openModal('timeline-aufstand')" class="text-left sm:text-right w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-emerald-700">1936-39: Arabischer Aufstand</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-arab relative w-1/2 ml-auto py-4 pr-8 text-right border-l-4 border-transparent">
-                        <h4 class="font-bold">Dez 1947: Haifa Raffinerie</h4><p class="text-sm">Massaker an 39 jüdischen Arbeitern.</p>
+                    <div class="timeline-item timeline-item-jewish relative sm:w-1/2 sm:ml-auto py-4 sm:pl-10 text-left">
+                         <button onclick="openModal('timeline-irgun-terror')" class="text-left w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-red-700">1937-39: Irgun-Terrorkampagne</h4>
+                        </button>
                     </div>
-                     <div class="timeline-item timeline-item-jewish relative w-1/2 ml-auto py-4 pl-8 text-left border-r-4 border-transparent">
-                        <h4 class="font-bold">Apr 1948: Deir Jassin</h4><p class="text-sm">Massaker an ~107 arabischen Zivilisten.</p>
+                    <div class="timeline-item timeline-item-context relative sm:w-full py-4 sm:text-center">
+                        <div class="sm:pl-10 sm:w-1/2 sm:mx-auto">
+                            <button onclick="openModal('timeline-un-plan')" class="text-left sm:text-center w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                                <h4 class="font-bold text-lg text-stone-600">1947 (29. Nov): UN-Teilungsplan</h4>
+                            </button>
+                        </div>
                     </div>
-                    <div class="timeline-item timeline-item-arab relative w-1/2 py-4 pr-8 text-right border-l-4 border-transparent">
-                        <h4 class="font-bold">Apr 1948: Hadassah-Konvoi</h4><p class="text-sm">Massaker an 78 jüdischen Ärzten & Pflegern.</p>
+                    <div class="timeline-item timeline-item-arab relative sm:w-1/2 py-4 sm:pr-10 sm:text-right">
+                         <button onclick="openModal('haifa')" class="text-left sm:text-right w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-emerald-700">Dez 1947: Haifa Raffinerie</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-jewish relative w-1/2 ml-auto py-4 pl-8 text-left border-r-4 border-transparent">
-                        <h4 class="font-bold">Mai 1948: Tantura</h4><p class="text-sm">Mutmaßliches Massaker an ~200 arabischen Männern.</p>
+                    <div class="timeline-item timeline-item-jewish relative sm:w-1/2 sm:ml-auto py-4 sm:pl-10 text-left">
+                         <button onclick="openModal('deirYassin')" class="text-left w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-red-700">Apr 1948: Deir Jassin</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-arab relative w-1/2 ml-auto py-4 pr-8 text-right border-l-4 border-transparent">
-                         <h4 class="font-bold">Mai 1948: Kfar Etzion</h4><p class="text-sm">Massaker an 127 jüdischen Verteidigern nach Kapitulation.</p>
+                    <div class="timeline-item timeline-item-arab relative sm:w-1/2 py-4 sm:pr-10 sm:text-right">
+                        <button onclick="openModal('hadassah')" class="text-left sm:text-right w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-emerald-700">Apr 1948: Hadassah-Konvoi</h4>
+                        </button>
                     </div>
-                    <div class="timeline-item timeline-item-jewish relative w-1/2 ml-auto py-4 pl-8 text-left border-r-4 border-transparent">
-                        <h4 class="font-bold">Jul 1948: Lydda & Ramle</h4><p class="text-sm">Massaker und Vertreibung von 50-70.000 Arabern.</p>
+                    <div class="timeline-item timeline-item-jewish relative sm:w-1/2 sm:ml-auto py-4 sm:pl-10 text-left">
+                        <button onclick="openModal('tantura')" class="text-left w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-red-700">Mai 1948: Tantura</h4>
+                        </button>
+                    </div>
+                    <div class="timeline-item timeline-item-arab relative sm:w-1/2 py-4 sm:pr-10 sm:text-right">
+                     <button onclick="openModal('kfarEtzion')" class="text-left sm:text-right w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                            <h4 class="font-bold text-emerald-700">Mai 1948: Kfar Etzion</h4>
+                        </button>
+                    </div>
+                    <div class="timeline-item timeline-item-context relative sm:w-full py-4 sm:text-center">
+                        <div class="sm:pl-10 sm:w-1/2 sm:mx-auto">
+                            <button onclick="openModal('timeline-staat')" class="text-left sm:text-center w-full hover:bg-stone-200 p-2 rounded-lg transition">
+                                <h4 class="font-bold text-lg text-stone-600">1948 (14. Mai): Staatsgründung</h4>
+                            </button>
+                        </div>
                     </div>
                 </div>
             </section>
@@ -249,22 +318,33 @@
 
     <!-- Modals -->
     <div id="modal-container">
+        <!-- Timeline Modals -->
+        <div id="timeline-balfour-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1917: Balfour-Deklaration</h3><p>In einem Brief an Lord Rothschild erklärte der britische Außenminister Arthur Balfour, dass die britische Regierung "die Errichtung einer nationalen Heimstätte für das jüdische Volk in Palästina mit Wohlwollen betrachtet". Dieses Dokument wurde zur politischen Grundlage für das zionistische Projekt und legte den Grundstein für das britische Mandat, das die jüdische Einwanderung erleichtern sollte, während es vage versprach, die "bürgerlichen und religiösen Rechte bestehender nicht-jüdischer Gemeinschaften" nicht zu beeinträchtigen.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Jonathan Schneer, "The Balfour Declaration: The Origins of the Arab-Israeli Conflict"</li><li>Primärquelle: Text der Balfour-Deklaration</li></ul></footer><button onclick="closeModal('timeline-balfour')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-nabi-musa-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1920: Nabi-Musa-Unruhen</h3><p>Während des muslimischen Nabi-Musa-Festes in Jerusalem hielten nationalistische Führer, darunter Amin al-Husseini, aufhetzende Reden. Ein arabischer Mob griff daraufhin das jüdische Viertel der Altstadt an. Über vier Tage wurden Juden angegriffen, ihre Geschäfte geplündert und Synagogen zerstört. Das Ergebnis waren 5 getötete und 216 verletzte Juden. Die langsame Reaktion der britischen Polizei erschütterte das Vertrauen des Jischuw in den Schutz durch die Mandatsmacht und führte direkt zur Gründung der Haganah als Selbstverteidigungsorganisation.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Tom Segev, "One Palestine, Complete"</li><li>Benny Morris, "Righteous Victims"</li></ul></footer><button onclick="closeModal('timeline-nabi-musa')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-unruhen1929-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1929: Landesweite Unruhen</h3><p>Ausgelöst durch einen Streit um Gebetsrechte an der Klagemauer, eskalierte die Gewalt zu einem landesweiten Pogrom. Das brutalste Ereignis war das Massaker von Hebron, bei dem ein arabischer Mob 67 Mitglieder der alten jüdischen Gemeinde ermordete. Insgesamt wurden 133 Juden getötet. Die Unruhen waren ein tiefes Trauma für den Jischuw, zerschmetterten die Hoffnung auf Koexistenz und führten zur massiven Aufrüstung und Professionalisierung der Haganah.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>The Shaw Commission Report (1930)</li><li>Tom Segev, "One Palestine, Complete"</li></ul></footer><button onclick="closeModal('timeline-unruhen1929')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-irgun-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1931: Gründung der Irgun</h3><p>Als Reaktion auf die als zu passiv empfundene Politik der Haganah während der Unruhen von 1929 spaltete sich eine radikalere Fraktion ab und gründete die "Irgun Zvai Leumi" (Nationale Militärorganisation). Unter der Ideologie des revisionistischen Zionismus von Ze'ev Jabotinsky lehnte die Irgun die Politik der "Havlagah" (Zurückhaltung) ab und befürwortete offensive Militäraktionen, um ihre politischen Ziele zu erreichen, einschließlich der Anwendung von Gewalt gegen Zivilisten.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "Righteous Victims"</li><li>Menachem Begin, "The Revolt" (als Primärquelle der Irgun-Perspektive)</li></ul></footer><button onclick="closeModal('timeline-irgun')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-aufstand-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1936-39: Arabischer Aufstand</h3><p>Ein drei Jahre andauernder nationalistischer Aufstand unter Führung des Arabischen Hochkomitees, der sich gegen die britische Mandatsherrschaft und die jüdische Einwanderung richtete. Der Aufstand umfasste einen landesweiten Generalstreik und eine Guerillakampagne, bei der arabische Milizen Straßen blockierten, jüdische Siedlungen und Zivilisten angriffen und Infrastruktur sabotierten. Der Aufstand forderte etwa 5.000 arabische, 400 jüdische und 200 britische Todesopfer und wurde von den Briten brutal niedergeschlagen.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>The Peel Commission Report (1937)</li><li>Walid Khalidi, "From Haven to Conquest"</li></ul></footer><button onclick="closeModal('timeline-aufstand')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-irgun-terror-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1937-39: Irgun-Terrorkampagne</h3><p>Als Reaktion auf den Arabischen Aufstand gab die Irgun die Politik der Zurückhaltung vollständig auf und startete eine systematische Kampagne des Vergeltungsterrors. Dies war der erste systematische Einsatz von wahlloser Gewalt gegen Zivilisten als strategisches Instrument durch eine jüdische Organisation. Die Angriffe umfassten zahlreiche Bombenanschläge auf arabische Märkte, Cafés und Busse, die darauf abzielten, zivile Opfer zu maximieren, Angst zu verbreiten und den Willen der arabischen Bevölkerung zu brechen.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "The Birth of the Palestinian Refugee Problem Revisited"</li></ul></footer><button onclick="closeModal('timeline-irgun-terror')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-un-plan-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1947: UN-Teilungsplan</h3><p>Die UN-Generalversammlung verabschiedete die Resolution 181, die die Teilung des britischen Mandatsgebiets Palästina in einen unabhängigen jüdischen und einen arabischen Staat sowie ein internationales Regime für Jerusalem empfahl. Die jüdische Führung akzeptierte den Plan, während die arabische Führung und die arabischen Staaten ihn kategorisch ablehnten. Die Verabschiedung der Resolution löste unmittelbar den Bürgerkrieg von 1947-48 aus.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Primärquelle: UN General Assembly Resolution 181</li><li>Avi Shlaim, "The Iron Wall: Israel and the Arab World"</li></ul></footer><button onclick="closeModal('timeline-un-plan')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="timeline-staat-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">1948: Staatsgründung Israels</h3><p>Am 14. Mai 1948, dem Tag vor dem Ende des britischen Mandats, verlas David Ben-Gurion in Tel Aviv die Unabhängigkeitserklärung Israels. Die Vereinigten Staaten erkannten den neuen Staat umgehend an, gefolgt von der Sowjetunion. Am folgenden Tag marschierten die Armeen von Ägypten, Transjordanien, Syrien, Libanon und Irak in das ehemalige Mandatsgebiet ein und verwandelten den bereits tobenden Bürgerkrieg in einen zwischenstaatlichen Krieg.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Primärquelle: Declaration of Establishment of State of Israel</li></ul></footer><button onclick="closeModal('timeline-staat')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+
         <!-- Arab Violence Modals -->
-        <div id="haifa-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker in der Ölraffinerie von Haifa (30. Dezember 1947)</h3><p>Am Morgen des 30. Dezember 1947 warfen Mitglieder der Irgun aus einem vorbeifahrenden Auto zwei Bomben in eine Menge arabischer Arbeiter, die vor dem Haupttor der Ölraffinerie von Haifa auf Arbeit warteten. Sechs Arbeiter wurden getötet und 42 verletzt. Was folgte, war ein sofortiger und brutaler Gewaltausbruch. Arabische Arbeiter und andere, die sich ihnen anschlossen, stürmten das Raffineriegelände und griffen ihre jüdischen Kollegen mit Eisenstangen, Messern und anderen Werkzeugen an. Bei dem Pogrom wurden 39 jüdische Arbeiter getötet und 49 verletzt. Die Haganah reagierte mit einem Vergeltungsangriff auf die nahegelegenen Dörfer Balad al-Sheikh und Hawassa, bei dem über 60 Araber getötet wurden. Der Vorfall ist ein tragisches Beispiel für den sich schnell entwickelnden Kreislauf von Terror und Vergeltung, der den Bürgerkrieg von 1947-48 kennzeichnete.</p><button onclick="closeModal('haifa')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
-        <div id="gushEtzion-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Der Konvoi der 35 (Lamed-Heh) (16. Januar 1948)</h3><p>In der Nacht des 15. auf den 16. Januar 1948 machte sich eine Einheit von 35 Haganah- und Palmach-Kämpfern zu Fuß auf den Weg, um den belagerten Siedlungsblock Gush Etzion südlich von Jerusalem mit Vorräten und Verstärkung zu versorgen. Die Einheit, die später als "Lamed-Heh" (die hebräische Zahl für 35) bekannt wurde, wurde in der Nähe des Dorfes Surif entdeckt. Hunderte von arabischen Milizionären und lokalen Dorfbewohnern umzingelten die Einheit schnell. In einer stundenlangen Schlacht bis zum letzten Mann wurden alle 35 jüdischen Kämpfer getötet. Berichte nach der Schlacht deuteten darauf hin, dass die Leichen von der Menge verstümmelt wurden. Das Ereignis wurde in Israel zu einem Symbol für Heldentum und Selbstaufopferung, verdeutlichte aber auch die extreme Gefahr, der isolierte jüdische Siedlungen und ihre Verteidiger ausgesetzt waren.</p><button onclick="closeModal('gushEtzion')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
-        <div id="hadassah-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker am Hadassah-Ärztekonvoi (13. April 1948)</h3><p>Als explizite Vergeltung für das Massaker von Deir Jassin, das vier Tage zuvor von Irgun- und Lechi-Einheiten verübt worden war, überfielen arabische Streitkräfte einen großen, deutlich als medizinisch gekennzeichneten Konvoi, der auf dem Weg zum Hadassah-Krankenhaus und dem Campus der Hebräischen Universität auf dem Mount Scopus war. Der Konvoi, der aus zehn Fahrzeugen bestand, geriet in einen Hinterhalt im arabischen Viertel Sheikh Jarrah. Über mehrere Stunden hinweg wurden die Fahrzeuge angegriffen. 78 jüdische Ärzte, Krankenschwestern, Studenten, Patienten und Haganah-Soldaten wurden getötet, viele bei lebendigem Leibe in den brennenden Bussen verbrannt. Die britischen Streitkräfte, deren Stützpunkte nur wenige hundert Meter entfernt waren, griffen trotz wiederholter Bitten nicht ein. Das Massaker wurde weithin als brutaler Akt der Barbarei verurteilt und zeigte die völlige Auflösung von Recht und Ordnung in den letzten Wochen des Mandats.</p><button onclick="closeModal('hadassah')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
-        <div id="kfarEtzion-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von Kfar Etzion (13. Mai 1948)</h3><p>Am Vorabend der israelischen Unabhängigkeitserklärung, nach einer mehrtägigen Schlacht, fiel der Gush-Etzion-Block, eine Gruppe von vier jüdischen Siedlungen, an die transjordanische Arabische Legion und lokale arabische Milizen. Nach der Kapitulation der Verteidiger von Kfar Etzion, der größten Siedlung, wurden die gefangenen jüdischen Kämpfer und Dorfbewohner zusammengetrieben. Anstatt als Kriegsgefangene behandelt zu werden, wurden sie massakriert. Etwa 127 der Gefangenen wurden getötet, viele von ihnen, nachdem sie sich bereits ergeben hatten. Nur vier Personen überlebten. Die anderen drei Siedlungen des Blocks ergaben sich und ihre Einwohner wurden als Kriegsgefangene genommen. Das Massaker war ein brutaler Abschluss des langen Kampfes um Gush Etzion und hinterließ ein tiefes Trauma in der jungen israelischen Nation.</p><button onclick="closeModal('kfarEtzion')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="haifa-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker in der Ölraffinerie von Haifa (30. Dezember 1947)</h3><p>Am Morgen des 30. Dezember 1947 warfen Mitglieder der Irgun aus einem vorbeifahrenden Auto zwei Bomben in eine Menge arabischer Arbeiter, die vor dem Haupttor der Ölraffinerie von Haifa auf Arbeit warteten. Sechs Arbeiter wurden getötet und 42 verletzt. Was folgte, war ein sofortiger und brutaler Gewaltausbruch. Arabische Arbeiter und andere, die sich ihnen anschlossen, stürmten das Raffineriegelände und griffen ihre jüdischen Kollegen mit Eisenstangen, Messern und anderen Werkzeugen an. Bei dem Pogrom wurden 39 jüdische Arbeiter getötet und 49 verletzt. Die Haganah reagierte mit einem Vergeltungsangriff auf die nahegelegenen Dörfer Balad al-Sheikh und Hawassa, bei dem über 60 Araber getötet wurden. Der Vorfall ist ein tragisches Beispiel für den sich schnell entwickelnden Kreislauf von Terror und Vergeltung, der den Bürgerkrieg von 1947-48 kennzeichnete.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "The Birth of the Palestinian Refugee Problem Revisited"</li><li>Ilan Pappé, "The Ethnic Cleansing of Palestine"</li></ul></footer><button onclick="closeModal('haifa')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="gushEtzion-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Der Konvoi der 35 (Lamed-Heh) (16. Januar 1948)</h3><p>In der Nacht des 15. auf den 16. Januar 1948 machte sich eine Einheit von 35 Haganah- und Palmach-Kämpfern zu Fuß auf den Weg, um den belagerten Siedlungsblock Gush Etzion südlich von Jerusalem mit Vorräten und Verstärkung zu versorgen. Die Einheit, die später als "Lamed-Heh" (die hebräische Zahl für 35) bekannt wurde, wurde in der Nähe des Dorfes Surif entdeckt. Hunderte von arabischen Milizionären und lokalen Dorfbewohnern umzingelten die Einheit schnell. In einer stundenlangen Schlacht bis zum letzten Mann wurden alle 35 jüdischen Kämpfer getötet. Berichte nach der Schlacht deuteten darauf hin, dass die Leichen von der Menge verstümmelt wurden. Das Ereignis wurde in Israel zu einem Symbol für Heldentum und Selbstaufopferung, verdeutlichte aber auch die extreme Gefahr, der isolierte jüdische Siedlungen und ihre Verteidiger ausgesetzt waren.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "1948: A History of the First Arab-Israeli War"</li></ul></footer><button onclick="closeModal('gushEtzion')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="hadassah-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker am Hadassah-Ärztekonvoi (13. April 1948)</h3><p>Als explizite Vergeltung für das Massaker von Deir Jassin, das vier Tage zuvor von Irgun- und Lechi-Einheiten verübt worden war, überfielen arabische Streitkräfte einen großen, deutlich als medizinisch gekennzeichneten Konvoi, der auf dem Weg zum Hadassah-Krankenhaus und dem Campus der Hebräischen Universität auf dem Mount Scopus war. Der Konvoi, der aus zehn Fahrzeugen bestand, geriet in einen Hinterhalt im arabischen Viertel Sheikh Jarrah. Über mehrere Stunden hinweg wurden die Fahrzeuge angegriffen. 78 jüdische Ärzte, Krankenschwestern, Studenten, Patienten und Haganah-Soldaten wurden getötet, viele bei lebendigem Leibe in den brennenden Bussen verbrannt. Die britischen Streitkräfte, deren Stützpunkte nur wenige hundert Meter entfernt waren, griffen trotz wiederholter Bitten nicht ein. Das Massaker wurde weithin als brutaler Akt der Barbarei verurteilt und zeigte die völlige Auflösung von Recht und Ordnung in den letzten Wochen des Mandats.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "1948: A History of the First Arab-Israeli War"</li><li>Larry Collins & Dominique Lapierre, "O Jerusalem!"</li></ul></footer><button onclick="closeModal('hadassah')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="kfarEtzion-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von Kfar Etzion (13. Mai 1948)</h3><p>Am Vorabend der israelischen Unabhängigkeitserklärung, nach einer mehrtägigen Schlacht, fiel der Gush-Etzion-Block, eine Gruppe von vier jüdischen Siedlungen, an die transjordanische Arabische Legion und lokale arabische Milizen. Nach der Kapitulation der Verteidiger von Kfar Etzion, der größten Siedlung, wurden die gefangenen jüdischen Kämpfer und Dorfbewohner zusammengetrieben. Anstatt als Kriegsgefangene behandelt zu werden, wurden sie massakriert. Etwa 127 der Gefangenen wurden getötet, viele von ihnen, nachdem sie sich bereits ergeben hatten. Nur vier Personen überlebten. Die anderen drei Siedlungen des Blocks ergaben sich und ihre Einwohner wurden als Kriegsgefangene genommen. Das Massaker war ein brutaler Abschluss des langen Kampfes um Gush Etzion und hinterließ ein tiefes Trauma in der jungen israelischen Nation.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "1948: A History of the First Arab-Israeli War"</li><li>Avi Shlaim, "The Iron Wall"</li></ul></footer><button onclick="closeModal('kfarEtzion')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
         <!-- Jewish Violence Modals -->
-        <div id="deirYassin-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von Deir Jassin (9. April 1948)</h3><p>Am 9. April 1948 griffen Einheiten der Irgun und Lechi im Rahmen der Operation Nachschon das Dorf Deir Jassin westlich von Jerusalem an. Mindestens 107 Dorfbewohner, darunter Frauen und Kinder, wurden getötet. Die Nachricht von dem Massaker wurde bewusst verbreitet und verstärkt, was unter der palästinensischen Bevölkerung Terror auslöste und zu einem Hauptkatalysator für die folgende Massenflucht wurde. Deir Jassin war somit weniger wegen seiner Opferzahl als wegen seiner tiefgreifenden und unmittelbaren psychologischen Wirkung ein Schlüsselereignis. Es wurde von allen Seiten strategisch instrumentalisiert.</p><button onclick="closeModal('deirYassin')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
-        <div id="tantura-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von Tantura (22.–23. Mai 1948)</h3><p>Nach der Kapitulation des Küstendorfes Tantura vor der Alexandroni-Brigade der IDF kam es laut palästinensischen und einigen israelischen Zeugenaussagen zur systematischen Hinrichtung von Dutzenden, möglicherweise bis zu 200, unbewaffneten Männern, die in einem Massengrab verscharrt wurden. Die Kontroverse um Tantura zeigt die Macht eines Staates, eine Erzählung von Gräueltaten zu unterdrücken. Im Gegensatz zu Deir Jassin, das sofort publik wurde, war Tantura ein mutmaßliches Verbrechen der offiziellen Staatsarmee, das jahrzehntelang aktiv verschleiert wurde.</p><button onclick="closeModal('tantura')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
-        <div id="lydda-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Die Vertreibung aus Lydda und Ramle (Juli 1948)</h3><p>Im Rahmen der Operation Dani eroberte die IDF die Zwillingsstädte Lydda und Ramle. Das Oberkommando gab einen Befehl zur Vertreibung der 50.000 bis 70.000 Einwohner. Während der Einnahme von Lydda ereignete sich ein Massaker in der Dahmash-Moschee. Die anschließende Vertreibung wurde als „Todesmarsch von Lydda“ bekannt, bei dem Hunderte an Durst und Erschöpfung starben. Dies markiert den Übergang zu staatlich sanktionierter, großangelegter ethnischer Säuberung durch die offizielle israelische Armee.</p><button onclick="closeModal('lydda')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
-        <div id="dawayima-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von al-Dawayima (29. Oktober 1948)</h3><p>Das 89. Kommando-Bataillon der IDF, dem auch ehemalige Irgun- und Lechi-Mitglieder angehörten, eroberte das Dorf und verübte ein großangelegtes Massaker an Zivilisten. Die Schätzungen der Toten reichen von 80–100 bis zu mehreren Hundert. Eine Zeugenaussage eines israelischen Soldaten beschreibt schreckliche Brutalität: „Die Kinder töteten sie, indem sie ihnen mit Stöcken die Köpfe einschlugen.“ Das Massaker wurde jahrzehntelang erfolgreich vertuscht und offenbart die Normalisierung der Gewalt am Ende des Krieges.</p><button onclick="closeModal('dawayima')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="deirYassin-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von Deir Jassin (9. April 1948)</h3><p>Am 9. April 1948 griffen Einheiten der Irgun und Lechi im Rahmen der Operation Nachschon das Dorf Deir Jassin westlich von Jerusalem an. Mindestens 107 Dorfbewohner, darunter Frauen und Kinder, wurden getötet. Die Nachricht von dem Massaker wurde bewusst verbreitet und verstärkt, was unter der palästinensischen Bevölkerung Terror auslöste und zu einem Hauptkatalysator für die folgende Massenflucht wurde. Deir Jassin war somit weniger wegen seiner Opferzahl als wegen seiner tiefgreifenden und unmittelbaren psychologischen Wirkung ein Schlüsselereignis. Es wurde von allen Seiten strategisch instrumentalisiert.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "The Birth of the Palestinian Refugee Problem Revisited"</li><li>Ilan Pappé, "The Ethnic Cleansing of Palestine"</li></ul></footer><button onclick="closeModal('deirYassin')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="tantura-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von Tantura (22.–23. Mai 1948)</h3><p>Nach der Kapitulation des Küstendorfes Tantura vor der Alexandroni-Brigade der IDF kam es laut palästinensischen und einigen israelischen Zeugenaussagen zur systematischen Hinrichtung von Dutzenden, möglicherweise bis zu 200, unbewaffneten Männern, die in einem Massengrab verscharrt wurden. Die Kontroverse um Tantura zeigt die Macht eines Staates, eine Erzählung von Gräueltaten zu unterdrücken. Im Gegensatz zu Deir Jassin, das sofort publik wurde, war Tantura ein mutmaßliches Verbrechen der offiziellen Staatsarmee, das jahrzehntelang aktiv verschleiert wurde.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Ilan Pappé, "The Ethnic Cleansing of Palestine"</li><li>Teddy Katz, M.A. Thesis (umstritten, aber zentral für die Debatte)</li></ul></footer><button onclick="closeModal('tantura')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="lydda-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Die Vertreibung aus Lydda und Ramle (Juli 1948)</h3><p>Im Rahmen der Operation Dani eroberte die IDF die Zwillingsstädte Lydda und Ramle. Das Oberkommando gab einen Befehl zur Vertreibung der 50.000 bis 70.000 Einwohner. Während der Einnahme von Lydda ereignete sich ein Massaker in der Dahmash-Moschee. Die anschließende Vertreibung wurde als „Todesmarsch von Lydda“ bekannt, bei dem Hunderte an Durst und Erschöpfung starben. Dies markiert den Übergang zu staatlich sanktionierter, großangelegter ethnischer Säuberung durch die offizielle israelische Armee.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "The Birth of the Palestinian Refugee Problem Revisited"</li><li>Ari Shavit, "My Promised Land"</li></ul></footer><button onclick="closeModal('lydda')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
+        <div id="dawayima-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4"><div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"><div class="p-8 prose max-w-none"><h3 class="text-2xl font-bold mb-4">Das Massaker von al-Dawayima (29. Oktober 1948)</h3><p>Das 89. Kommando-Bataillon der IDF, dem auch ehemalige Irgun- und Lechi-Mitglieder angehörten, eroberte das Dorf und verübte ein großangelegtes Massaker an Zivilisten. Die Schätzungen der Toten reichen von 80–100 bis zu mehreren Hundert. Eine Zeugenaussage eines israelischen Soldaten beschreibt schreckliche Brutalität: „Die Kinder töteten sie, indem sie ihnen mit Stöcken die Köpfe einschlugen.“ Das Massaker wurde jahrzehntelang erfolgreich vertuscht und offenbart die Normalisierung der Gewalt am Ende des Krieges.</p><footer class="mt-6 border-t pt-4"><h4 class="font-bold text-sm text-stone-600">Quellen:</h4><ul class="text-sm text-stone-500 list-disc pl-5"><li>Benny Morris, "The Birth of the Palestinian Refugee Problem Revisited"</li></ul></footer><button onclick="closeModal('dawayima')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button></div></div></div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             const tabs = document.querySelectorAll('.main-tab');
             const tabContents = document.querySelectorAll('.tab-content');
+            let charts = {};
 
             function setActiveTab(tabId) {
                 tabs.forEach(tab => {
@@ -286,19 +366,18 @@
                         content.classList.add('hidden');
                     }
                 });
+                renderChartsForTab(tabId);
             }
 
             tabs.forEach(tab => {
                 tab.addEventListener('click', () => setActiveTab(tab.dataset.tab));
             });
             
-            setActiveTab('context');
-
             const populationData = {
                 labels: ['1882', '1914', '1922', '1931', '1947'],
                 datasets: [
                     { label: 'Jüdische Bevölkerung', data: [24000, 94000, 83794, 174610, 630000], borderColor: '#DC2626', backgroundColor: 'rgba(220, 38, 38, 0.2)', fill: true, tension: 0.1 },
-                    { label: 'Arabische & Andere Bevölkerung', data: [276000, 595000, 673388, 861211, 1319000], borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.2)', fill: true, tension: 0.1 }
+                    { label: 'Arabische & Andere Bevölkerung', data: [464000, 595000, 673388, 861211, 1319000], borderColor: '#059669', backgroundColor: 'rgba(5, 150, 105, 0.2)', fill: true, tension: 0.1 }
                 ]
             };
             const unrest1929Data = {
@@ -309,13 +388,23 @@
                 labels: ['Nov 1937', 'Apr 1938', 'Jun 1938', 'Jul 1938 (1)', 'Jul 1938 (2)', 'Aug 1938', 'Feb 1939'],
                 datasets: [{ label: 'Getötete arabische Zivilisten', data: [10, 4, 18, 23, 43, 24, 33], backgroundColor: 'rgba(220, 38, 38, 0.6)', borderColor: '#DC2626', borderWidth: 1 }]
             };
-
+            
             const chartOptionsLine = { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'top' } }, scales: { y: { beginAtZero: true } } };
             const chartOptionsDoughnut = { maintainAspectRatio: false, responsive: true, plugins: { legend: { position: 'bottom' } } };
+
+            function renderChartsForTab(tabId) {
+                if (tabId === 'context' && !charts.population) {
+                    charts.population = new Chart(document.getElementById('populationChart').getContext('2d'), { type: 'line', data: populationData, options: chartOptionsLine });
+                }
+                if (tabId === 'arab' && !charts.unrest) {
+                    charts.unrest = new Chart(document.getElementById('unrest1929Chart').getContext('2d'), { type: 'doughnut', data: unrest1929Data, options: chartOptionsDoughnut });
+                }
+                if (tabId === 'jewish' && !charts.attacks) {
+                    charts.attacks = new Chart(document.getElementById('attacksChart').getContext('2d'), { type: 'bar', data: attacksData, options: chartOptionsLine });
+                }
+            }
             
-            new Chart(document.getElementById('populationChart').getContext('2d'), { type: 'line', data: populationData, options: chartOptionsLine });
-            new Chart(document.getElementById('unrest1929Chart').getContext('2d'), { type: 'doughnut', data: unrest1929Data, options: chartOptionsDoughnut });
-            new Chart(document.getElementById('attacksChart').getContext('2d'), { type: 'bar', data: attacksData, options: chartOptionsLine });
+            setActiveTab('context');
         });
 
         function openModal(modalId) {
@@ -334,12 +423,13 @@
             }
         }
 
-        window.onclick = function(event) {
+        // Close modal on background click
+        window.addEventListener('click', function(event) {
             if (event.target.classList.contains('modal')) {
-                const modalId = event.target.id.replace('-modal', '');
-                closeModal(modalId);
+                event.target.classList.add('hidden');
+                document.body.style.overflow = 'auto';
             }
-        }
+        });
     </script>
 </body>
 </html>
