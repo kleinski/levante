@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="de" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Analyse der Gewalt in Palästina (1900–1948)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Lora:wght@400;600&display=swap" rel="stylesheet">
+    <!-- Chosen Palette: Calm Harmony -->
+    <!-- Application Structure Plan: A phased, thematic single-page scrolling experience. The structure guides the user through a narrative of escalation in three phases: 1. "Seeds of Conflict" (demographics, land), 2. "Rise of Militancy" (paramilitary groups, organized terror), and 3. "The Nakba" (large-scale operations, massacres). This structure was chosen to transform the dense chronological report into an exploratory tool. It breaks down complex information into digestible, interactive chunks (charts, tabs, modals), helping users understand the causal links between the phases more effectively than a linear document. -->
+    <!-- Visualization & Content Choices: 1. Population Data (Table 1) -> Goal: Show demographic shift -> Viz: Interactive Line Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Best for showing change over time. 2. Irgun Attacks (Table 2) -> Goal: Show pattern of systematic terror -> Viz: Interactive Bar Chart (Chart.js) -> Interaction: Hover tooltips -> Justification: Clearly shows scale of individual attacks. 3. Paramilitary Profiles -> Goal: Compare ideologies -> Viz: Tabbed content area (HTML/CSS/JS) -> Interaction: Click tabs -> Justification: Space-efficient comparison. 4. Massacre Case Studies -> Goal: Present sensitive details without clutter -> Viz: Card layout with modals -> Interaction: Click to open modal -> Justification: Allows deep dives without losing narrative flow. -->
+    <!-- CONFIRMATION: NO SVG graphics used. NO Mermaid JS used. -->
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #F5F5F4; /* stone-100 */
+            color: #44403C; /* stone-700 */
+        }
+        h1, h2, h3, h4 {
+            font-family: 'Lora', serif;
+        }
+       .nav-link {
+            transition: color 0.3s, border-color 0.3s;
+        }
+       .nav-link.active {
+            color: #DC2626; /* red-600 */
+            border-bottom-color: #DC2626;
+        }
+       .modal {
+            transition: opacity 0.3s ease;
+        }
+       .chart-container {
+            position: relative;
+            width: 100%;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+            height: 300px;
+            max-height: 400px;
+        }
+       .prose {
+            color: #44403C;
+        }
+       .prose h3 {
+            color: #1C1917;
+        }
+       .prose p {
+            line-height: 1.7;
+        }
+       .prose strong {
+            color: #1C1917;
+        }
+        @media (min-width: 768px) {
+           .chart-container {
+                height: 400px;
+            }
+        }
+    </style>
+</head>
+<body class="antialiased">
+
+    <header id="header" class="bg-stone-100/80 backdrop-blur-md sticky top-0 z-50 shadow-sm">
+        <nav class="container mx-auto px-4">
+            <ul class="flex justify-center items-center space-x-4 sm:space-x-8 py-4 text-sm sm:text-base">
+                <li><a href="#phase1" class="nav-link font-semibold pb-1 border-b-2 border-transparent hover:text-red-600">Phase 1: Wurzeln</a></li>
+                <li><a href="#phase2" class="nav-link font-semibold pb-1 border-b-2 border-transparent hover:text-red-600">Phase 2: Militanz</a></li>
+                <li><a href="#phase3" class="nav-link font-semibold pb-1 border-b-2 border-transparent hover:text-red-600">Phase 3: Nakba</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main class="container mx-auto px-4 py-8 sm:py-12">
+
+        <section class="text-center mb-16">
+            <h1 class="text-3xl sm:text-4xl md:text-5xl font-bold text-stone-800 mb-4">Die Eskalation der Gewalt in Palästina</h1>
+            <p class="text-lg sm:text-xl text-stone-600 max-w-4xl mx-auto">Eine interaktive Analyse der Gewalt von jüdischer Seite gegen die arabische Bevölkerung, 1900–1948</p>
+            <p class="mt-4 max-w-3xl mx-auto text-stone-500">Diese Anwendung analysiert die Entwicklung der Gewalt von lokal begrenzten Auseinandersetzungen hin zu organisierten, ideologisch motivierten Kampagnen paramilitärischer Gruppen, die in den Massakern und Vertreibungen des Krieges von 1948 gipfelten.</p>
+        </section>
+
+        <div id="content">
+
+            <section id="phase1" class="mb-20 py-10 scroll-mt-20">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-red-700">Phase 1: Wurzeln des Konflikts (1900–1920er)</h2>
+                    <p class="mt-2 text-lg text-stone-600">Die ersten Reibungspunkte entstanden durch demografischen Wandel, systematischen Landerwerb und die daraus resultierende Verdrängung.</p>
+                </div>
+
+                <div class="grid lg:grid-cols-5 gap-12">
+                    <div class="lg:col-span-3 prose max-w-none">
+                        <h3 class="text-2xl font-semibold text-stone-800">Demografie und Land</h3>
+                        <p>Zu Beginn des 20. Jahrhunderts war Palästina eine dünn besiedelte Provinz des Osmanischen Reiches mit einer arabischen Mehrheit von über 90 %. Die jüdische Bevölkerung, der „Alte Jischuw“, war klein und konzentrierte sich auf religiöse Zentren. Die Erste und Zweite Alija (1882–1914) brachten ideologisch motivierte Einwanderer, die das Land nicht nur bewohnen, sondern in eine nationale Heimstätte umwandeln wollten.</p>
+                        
+                        <h4 class="text-xl font-semibold text-stone-800 mt-8">Landerwerb und Verdrängung</h4>
+                        <p>Der Landerwerb durch zionistische Organisationen wie den Jüdischen Nationalfonds (JNF) war der primäre Konfliktherd. Ein Großteil des Landes wurde von wohlhabenden, oft abwesenden arabischen Großgrundbesitzern erworben, was zur Vertreibung der arabischen Pachtbauern (*Fellachen*) führte. Dieser Prozess schuf eine Klasse landloser, verbitterter Araber und nährte eine tiefe Wut, die sich nicht nur gegen die Neuankömmlinge, sondern auch gegen die eigene Elite richtete.</p>
+                        <p>Das zionistische Konzept des exklusiven nationalen Eigentums – Land des JNF war unveräußerliches Eigentum des jüdischen Volkes – kollidierte mit den traditionellen Landnutzungsrechten der *Fellachen*. Es war nicht nur eine Transaktion, sondern die Einführung eines neuen, exklusiven Systems.</p>
+
+                        <h4 class="text-xl font-semibold text-stone-800 mt-8">Frühe Gewalt und narrative Verschiebung</h4>
+                        <p>Die ersten gewalttätigen Zwischenfälle ereigneten sich in den 1880er Jahren, oft als lokale Streitigkeiten um Land oder Weiderechte, wie 1886 in Petach Tikwa. Entscheidend war jedoch die narrative Verschiebung: Jüdische Siedler begannen, diese Vorfälle nicht mehr als isolierte kriminelle Akte, sondern als Manifestationen eines koordinierten, nationalistischen „Araberhasses“ zu interpretieren. Diese neue Rahmung verwandelte lokale Sicherheitsprobleme in einen existenziellen nationalen Kampf und rechtfertigte die Notwendigkeit einer organisierten Selbstverteidigung, was den Grundstein für spätere Milizen legte.</p>
+                    </div>
+                    <div class="lg:col-span-2">
+                        <h4 class="text-xl font-semibold text-center mb-4 text-stone-800">Bevölkerungsentwicklung in Palästina (1882–1922)</h4>
+                        <div class="chart-container bg-white p-4 rounded-lg shadow-md">
+                            <canvas id="populationChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-stone-500 mt-2">Die Grafik zeigt das schnelle Wachstum der jüdischen Bevölkerung im Vergleich zur etablierten arabischen Mehrheit.</p>
+                    </div>
+                </div>
+            </section>
+
+            <section id="phase2" class="mb-20 py-10 scroll-mt-20">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-red-700">Phase 2: Aufstieg der Militanz (1930er)</h2>
+                    <p class="mt-2 text-lg text-stone-600">Der politische Rahmen des britischen Mandats institutionalisierte den Konflikt und führte zur Bildung organisierter paramilitärischer Gruppen.</p>
+                </div>
+
+                <div class="mb-12">
+                     <h3 class="text-2xl font-semibold text-stone-800 mb-4 text-center">Jüdische Paramilitärische Organisationen</h3>
+                     <p class="max-w-3xl mx-auto text-center text-stone-600 mb-6">Der Jischuw gründete mehrere Milizen, die die tiefen ideologischen Spaltungen der zionistischen Bewegung widerspiegelten. Klicken Sie auf die Reiter, um mehr über die Hauptgruppen zu erfahren.</p>
+                    <div class="max-w-4xl mx-auto">
+                        <div class="flex border-b border-stone-300 mb-4 justify-center">
+                            <button data-tab="hagana" class="tab-btn active-tab px-6 py-2 font-semibold text-stone-600 border-b-2 border-red-600">Haganah</button>
+                            <button data-tab="irgun" class="tab-btn px-6 py-2 font-semibold text-stone-500 border-b-2 border-transparent">Irgun (Etzel)</button>
+                            <button data-tab="lechi" class="tab-btn px-6 py-2 font-semibold text-stone-500 border-b-2 border-transparent">Lechi</button>
+                        </div>
+                        <div id="tab-content" class="bg-white p-6 rounded-lg shadow-md">
+                            <div id="hagana-content" class="tab-pane prose max-w-none">
+                                <h4 class="font-bold text-xl mb-2 text-stone-800">Haganah (Die Verteidigung)</h4>
+                                <p>Gegründet 1920, war sie die größte Untergrundarmee des Jischuw und unterstand der Kontrolle der etablierten Jewish Agency. Offiziell verfolgte sie die Politik der <strong>Havlagah (Zurückhaltung)</strong>, konzentrierte sich auf Verteidigung und vermied Vergeltungsangriffe auf Zivilisten, um die Beziehung zu den Briten aufrechtzuerhalten. Sie entwickelte sich nach den Unruhen von 1929 zu einer fähigen Armee.</p>
+                            </div>
+                            <div id="irgun-content" class="tab-pane hidden prose max-w-none">
+                                <h4 class="font-bold text-xl mb-2 text-stone-800">Irgun Zvai Leumi (Nationale Militärorganisation)</h4>
+                                <p>Eine Abspaltung der Haganah von 1931, die die <strong>Havlagah</strong> als defätistisch ablehnte. Als militärischer Arm des revisionistischen Zionismus unter Ze'ev Jabotinsky befürwortete sie offensive Gewalt zur Errichtung eines jüdischen Staates. Während des Arabischen Aufstands startete sie eine systematische Kampagne des Terrors gegen arabische Zivilisten, einschließlich Bombenanschlägen auf Märkten und in Bussen.</p>
+                            </div>
+                            <div id="lechi-content" class="tab-pane hidden prose max-w-none">
+                                <h4 class="font-bold text-xl mb-2 text-stone-800">Lechi (Kämpfer für die Freiheit Israels)</h4>
+                                <p>Eine radikale Abspaltung der Irgun von 1940, angeführt von Avraham Stern. Die Lechi betrachtete die Briten als Hauptfeind und verübte Attentate und Terroranschläge. Sie war extremistisch in ihren Methoden und versuchte sogar, ein Bündnis mit Nazi-Deutschland gegen die Briten zu schmieden, da sie die Briten als das größere Hindernis für einen jüdischen Staat ansah.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="grid md:grid-cols-2 gap-12 items-center mt-16">
+                    <div class="prose max-w-none">
+                        <h3 class="text-2xl font-semibold text-stone-800">Der Arabische Aufstand und die Gegenoffensive</h3>
+                        <p>Der Arabische Aufstand (1936–1939) war eine nationalistische Erhebung gegen die britische Herrschaft und die jüdische Einwanderung. Als Reaktion darauf gab die <strong>Irgun</strong> die Politik der Zurückhaltung vollständig auf und startete eine systematische Kampagne des Vergeltungsterrors gegen arabische Zivilisten. Dies war der erste systematische Einsatz von wahlloser Gewalt gegen Zivilisten als strategisches Instrument durch eine jüdische Organisation.</p>
+                        <p>Die Angriffe auf zivile Infrastruktur wie Märkte, Cafés und Busse zielten darauf ab, zivile Opfer zu maximieren, Angst zu verbreiten und den Willen der arabischen Bevölkerung zu brechen.</p>
+                    </div>
+                    <div>
+                        <h4 class="text-xl font-semibold text-center mb-4 text-stone-800">Irgun-Terrorkampagne (1937–1939)</h4>
+                         <div class="chart-container bg-white p-4 rounded-lg shadow-md">
+                            <canvas id="attacksChart"></canvas>
+                        </div>
+                        <p class="text-center text-sm text-stone-500 mt-2">Gemeldete Todesopfer bei einigen der größten Anschläge der Irgun.</p>
+                    </div>
+                </div>
+
+                <div class="prose max-w-4xl mx-auto mt-16 bg-white p-8 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800">Die Special Night Squads (SNS)</h3>
+                    <p>Während des Arabischen Aufstands arbeiteten die Briten mit der Haganah zusammen, um die Erhebung niederzuschlagen. Sie gründeten die <strong>Special Night Squads (SNS)</strong>, eine gemeinsame britisch-jüdische Einheit zur Aufstandsbekämpfung unter der Führung des pro-zionistischen britischen Hauptmanns <strong>Orde Wingate</strong>.</p>
+                    <p>Die SNS wandte brutale Taktiken an, darunter nächtliche Razzien in Dörfern, Geiselnahmen und standrechtliche Erschießungen, um die arabische Bevölkerung einzuschüchtern. Zukünftige israelische Führungspersönlichkeiten wie <strong>Mosche Dajan</strong> und <strong>Jigal Allon</strong> waren Mitglieder dieser Einheit.</p>
+                    <p>Die von Wingate gelehrten Methoden – Nachtangriffe, Kollektivstrafen und überwältigende Gewalt – wurden von Haganah-Kommandanten übernommen und wurden zu grundlegenden Elementen des operativen Ethos der zukünftigen Israelischen Verteidigungsstreitkräfte (IDF). Die SNS diente somit als entscheidender Transfer militärischer Doktrinen von einer Kolonialmacht zur entstehenden jüdischen Armee.</p>
+                </div>
+            </section>
+
+            <section id="phase3" class="mb-12 py-10 scroll-mt-20">
+                <div class="text-center mb-12">
+                    <h2 class="text-3xl font-bold text-red-700">Phase 3: Der Krieg von 1948 und die Nakba</h2>
+                    <p class="mt-2 text-lg text-stone-600">Die Gewalt gipfelte in großangelegten Militäroperationen, Massakern und der systematischen Vertreibung der arabischen Bevölkerung.</p>
+                </div>
+
+                <div class="prose max-w-4xl mx-auto mb-12 bg-white p-8 rounded-lg shadow-md">
+                    <h3 class="text-2xl font-semibold text-stone-800">Plan Dalet: Blaupause zur Eroberung</h3>
+                    <p>Im März 1948 verabschiedete die Haganah den <strong>Plan Dalet (Plan D)</strong>. Offiziell ein Verteidigungsplan zur Sicherung des jüdischen Staates, enthielt er operative Richtlinien für den Umgang mit arabischen Dörfern. Entscheidend war die Anweisung zur „Zerstörung von Dörfern (durch Inbrandsetzen, Sprengen und Verminen der Trümmer) [...] Im Falle von Widerstand muss die bewaffnete Kraft vernichtet und die Bevölkerung über die Grenzen des Staates vertrieben werden“.</p>
+                    <p>Historiker wie <strong>Ilan Pappé</strong> sehen darin einen Masterplan zur ethnischen Säuberung. Andere, wie <strong>Benny Morris</strong>, argumentieren, es sei eine militärisch motivierte Reaktion gewesen, räumen aber ein, dass der Plan den Kommandeuren die Genehmigung und Rechtfertigung für Vertreibungen gab. Unabhängig von der Absicht funktionierte Plan Dalet in der Praxis als Ermächtigung zur ethnischen Säuberung und schuf einen Rahmen der Zulässigkeit für die Entvölkerung arabischer Gebiete.</p>
+                </div>
+
+                <div class="prose max-w-4xl mx-auto mb-12">
+                    <h3 class="text-2xl font-semibold text-stone-800 text-center">Die Entvölkerung der Städte und Dörfer</h3>
+                    <p class="text-center">Die Umsetzung von Plan Dalet begann Anfang April 1948 mit der <strong>Operation Nachschon</strong>, die darauf abzielte, die Straße nach Jerusalem zu öffnen. Diese Operation markierte einen Wendepunkt und beinhaltete die systematische Räumung eines ganzen Gebiets von arabischen Dörfern.</p>
+                    <p class="text-center">Anschließend eroberten zionistische Kräfte die großen gemischten Städte. In <strong>Haifa</strong> (April 1948) und <strong>Jaffa</strong> (April–Mai 1948) floh die große Mehrheit der arabischen Bevölkerung von über 100.000 Menschen oder wurde vertrieben. Der Fall dieser wirtschaftlichen und kulturellen Zentren versetzte der palästinensisch-arabischen Gesellschaft den Todesstoß und löste einen Dominoeffekt der Flucht aus. Am Ende des Krieges waren zwischen 400 und 600 palästinensische Dörfer entvölkert und etwa 750.000 Palästinenser zu Flüchtlingen geworden.</p>
+                </div>
+
+                <h3 class="text-2xl font-semibold text-stone-800 mb-8 text-center">Fallstudien zu Massengewalt und Vertreibung</h3>
+                <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                        <h4 class="font-bold text-xl mb-2 text-stone-800">Deir Jassin</h4>
+                        <p class="text-stone-600 flex-grow">Ein Angriff von Irgun und Lechi, der in einem Massaker an mindestens 107 Zivilisten gipfelte. Die Nachricht wurde gezielt verbreitet, um Terror zu säen und die Massenflucht der Araber zu beschleunigen.</p>
+                        <button onclick="openModal('deirYassin')" class="mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition-colors w-full">Mehr erfahren</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                        <h4 class="font-bold text-xl mb-2 text-stone-800">Tantura</h4>
+                        <p class="text-stone-600 flex-grow">Nach der Kapitulation des Dorfes sollen Soldaten der Alexandroni-Brigade der IDF bis zu 200 unbewaffnete Männer systematisch hingerichtet und in einem Massengrab verscharrt haben. Ein jahrzehntelang verschleiertes Verbrechen.</p>
+                        <button onclick="openModal('tantura')" class="mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition-colors w-full">Mehr erfahren</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                        <h4 class="font-bold text-xl mb-2 text-stone-800">Lydda & Ramle</h4>
+                        <p class="text-stone-600 flex-grow">Eine staatlich sanktionierte, großangelegte ethnische Säuberung. Auf direkten Befehl wurden 50.000–70.000 Einwohner vertrieben, was zum berüchtigten "Todesmarsch von Lydda" führte.</p>
+                        <button onclick="openModal('lydda')" class="mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition-colors w-full">Mehr erfahren</button>
+                    </div>
+                    <div class="bg-white p-6 rounded-lg shadow-md flex flex-col">
+                        <h4 class="font-bold text-xl mb-2 text-stone-800">Al-Dawayima</h4>
+                        <p class="text-stone-600 flex-grow">Ein besonders brutales Massaker durch ein IDF-Bataillon, bei dem Hunderte Zivilisten, auch Kinder, getötet wurden. Zeugenaussagen beschreiben extreme Grausamkeit. Das Verbrechen wurde erfolgreich vertuscht.</p>
+                        <button onclick="openModal('dawayima')" class="mt-4 bg-red-600 text-white font-bold py-2 px-4 rounded hover:bg-red-700 transition-colors w-full">Mehr erfahren</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer class="bg-stone-200 text-center py-6">
+        <p class="text-stone-600">Dieser Bericht basiert auf öffentlich zugänglichen historischen Daten und Analysen.</p>
+    </footer>
+
+    <div id="modal-container">
+        <div id="deirYassin-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-8 prose max-w-none">
+                    <h3 class="text-2xl font-bold mb-4">Das Massaker von Deir Jassin (9. April 1948)</h3>
+                    <p>Am 9. April 1948 griffen Einheiten der Irgun und Lechi im Rahmen der Operation Nachschon das Dorf Deir Jassin westlich von Jerusalem an. Die Angreifer stießen auf unerwartet heftigen Widerstand und griffen zu brutalen Methoden, indem sie Handgranaten in Häuser warfen und wahllos um sich schossen.</p>
+                    <p>Mindestens 107 Dorfbewohner, darunter Frauen und Kinder, wurden getötet. Anfängliche, stark übertriebene Berichte sprachen von 254 Toten, eine Zahl, die sowohl von arabischen als auch von zionistischen Quellen zu Propagandazwecken verwendet wurde. Zeugenaussagen von Überlebenden und einige Berichte erwähnen Vergewaltigungen, Verstümmelungen und die öffentliche Demütigung und anschließende Hinrichtung von gefangenen Männern. Die historische Debatte dauert an; einige, wie Eliezer Tauber, bestreiten, dass ein Massaker stattgefunden hat, und sprechen von einer heftigen Schlacht, eine Ansicht, die von den meisten Historikern und den Berichten der Überlebenden stark angefochten wird.</p>
+                    <p>Die Nachricht von dem Massaker wurde bewusst verbreitet und verstärkt, was unter der palästinensischen Bevölkerung Terror auslöste und zu einem Hauptkatalysator für die folgende Massenflucht wurde. Deir Jassin war somit weniger wegen seiner Opferzahl als wegen seiner tiefgreifenden und unmittelbaren psychologischen Wirkung ein Schlüsselereignis. Es wurde von allen Seiten strategisch instrumentalisiert: Für die Irgun/Lechi war es eine Terrortaktik, um die arabische Moral zu brechen. Für das Arabische Hochkomitee war es ein Mittel, um die arabischen Staaten zum Eingreifen zu bewegen. Und für die Haganah/Jewish Agency ermöglichte die öffentliche Verurteilung des Massakers, die moralische Überlegenheit zu wahren, während man gleichzeitig von der daraus resultierenden arabischen Flucht profitierte.</p>
+                    <button onclick="closeModal('deirYassin')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button>
+                </div>
+            </div>
+        </div>
+        <div id="tantura-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-8 prose max-w-none">
+                    <h3 class="text-2xl font-bold mb-4">Das Massaker von Tantura (22.–23. Mai 1948)</h3>
+                    <p>Nach der Kapitulation des Küstendorfes Tantura vor der Alexandroni-Brigade der IDF kam es laut palästinensischen und einigen israelischen Zeugenaussagen zur systematischen Hinrichtung von Dutzenden, möglicherweise bis zu 200, unbewaffneten Männern, die in einem Massengrab verscharrt wurden.</p>
+                    <p>Diese Anschuldigung basiert hauptsächlich auf der Oral-History-Forschung von Teddy Katz, die später unter juristischem Druck zurückgezogen, aber von anderen Historikern wie Ilan Pappé gestützt wurde. Zeugenaussagen sowohl von palästinensischen Überlebenden als auch von israelischen Veteranen beschreiben die Tötungen. Es wird vermutet, dass sich das Massengrab unter dem heutigen Parkplatz des Dor-Strandes befindet, und Forensic Architecture hat potenzielle Grabstätten identifiziert.</p>
+                    <p>Die Kontroverse um Tantura zeigt die Macht eines Staates, eine Erzählung von Gräueltaten zu unterdrücken, und die entscheidende Rolle der mündlichen Überlieferung bei der Anfechtung der offiziellen Geschichtsschreibung. Im Gegensatz zu Deir Jassin, das sofort publik wurde, war Tantura ein mutmaßliches Verbrechen der offiziellen Staatsarmee, das jahrzehntelang aktiv verschleiert wurde.</p>
+                    <button onclick="closeModal('tantura')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button>
+                </div>
+            </div>
+        </div>
+        <div id="lydda-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-8 prose max-w-none">
+                    <h3 class="text-2xl font-bold mb-4">Die Vertreibung aus Lydda und Ramle (Juli 1948)</h3>
+                    <p>Im Rahmen der Operation Dani eroberte die IDF die Zwillingsstädte Lydda und Ramle. Das Oberkommando gab einen Befehl zur Vertreibung der 50.000 bis 70.000 Einwohner. Jitzchak Rabin unterzeichnete den Vertreibungsbefehl für Lydda mit den Worten: „Die Einwohner von Lydda müssen schnell vertrieben werden, ohne Rücksicht auf das Alter“.</p>
+                    <p>Während der Einnahme von Lydda ereignete sich ein Massaker in und um die Dahmash-Moschee, in der Hunderte von Zivilisten Zuflucht gesucht hatten; die Schätzungen der Toten reichen von Dutzenden bis über 250. Die anschließende Vertreibung zwang Zehntausende in der Sommerhitze auf die Straße in Richtung Ramallah, ein Ereignis, das als „Todesmarsch von Lydda“ bekannt wurde und bei dem eine unbekannte Zahl, wahrscheinlich Hunderte, an Durst und Erschöpfung starben.</p>
+                    <p>Die Ereignisse von Lydda und Ramle markieren den unmissverständlichen Übergang von ad-hoc oder paramilitärisch geführter Gewalt zu staatlich sanktionierter, großangelegter ethnischer Säuberung durch die offizielle israelische Armee. Dies war keine Gräueltat eines „abtrünnigen“ Elements, sondern eine zentral gesteuerte Militäroperation mit dem ausdrücklichen Ziel der Massenvertreibung.</p>
+                    <button onclick="closeModal('lydda')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button>
+                </div>
+            </div>
+        </div>
+        <div id="dawayima-modal" class="modal hidden fixed inset-0 bg-black bg-opacity-60 z-50 flex justify-center items-center p-4">
+            <div class="bg-white rounded-lg shadow-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto">
+                <div class="p-8 prose max-w-none">
+                    <h3 class="text-2xl font-bold mb-4">Das Massaker von al-Dawayima (29. Oktober 1948)</h3>
+                    <p>Das 89. Kommando-Bataillon der IDF, eine Einheit, der auch ehemalige Irgun- und Lechi-Mitglieder angehörten, eroberte das Dorf al-Dawayima. Laut mehreren Berichten folgte ein großangelegtes Massaker an Zivilisten. Die Schätzungen der Toten reichen von 80–100 bis zu mehreren Hundert.</p>
+                    <p>Eine jahrzehntelang unterdrückte Zeugenaussage eines israelischen Soldaten beschreibt schreckliche Brutalität: „Die Kinder töteten sie, indem sie ihnen mit Stöcken die Köpfe einschlugen. Es gab kein Haus ohne Tote.“ Der Bericht schildert auch die Sprengung von Häusern mit älteren Frauen darin sowie die Vergewaltigung und Ermordung einer Frau. Dutzende ältere Männer wurden in der Moschee getötet und viele weitere in einer Höhle, in der sie Zuflucht gesucht hatten.</p>
+                    <p>Das Massaker von al-Dawayima, das spät im Krieg von einer regulären Armeeeinheit verübt wurde, offenbart die Normalisierung und Brutalisierung der Gewalt. Die Tatsache, dass es im Gegensatz zu Deir Jassin erfolgreich vertuscht wurde und jahrzehntelang weitgehend unbekannt blieb, deutet darauf hin, dass innerhalb des neuen Staates bereits ein wirksamer interner Mechanismus der Verleugnung und Unterdrückung funktionierte.</p>
+                    <button onclick="closeModal('dawayima')" class="mt-6 bg-stone-700 text-white font-bold py-2 px-4 rounded hover:bg-stone-800 transition-colors no-prose">Schließen</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const populationData = {
+                labels: ['1882', '1914', '1922'],
+                datasets: [
+                    {
+                        label: 'Jüdische Bevölkerung',
+                        data: [24000, 94000, 83794],
+                        borderColor: '#DC2626', // red-600
+                        backgroundColor: 'rgba(220, 38, 38, 0.2)',
+                        fill: true,
+                        tension: 0.1
+                    },
+                    {
+                        label: 'Muslimische Bevölkerung',
+                        data: [276000, 525000, 590890],
+                        borderColor: '#57534E', // stone-600
+                        backgroundColor: 'rgba(87, 83, 78, 0.2)',
+                        fill: true,
+                        tension: 0.1
+                    }
+                ]
+            };
+
+            const attacksData = {
+                labels: ['Nov 1937', 'Apr 1938', 'Jun 1938', 'Jul 1938 (1)', 'Jul 1938 (2)', 'Aug 1938', 'Feb 1939', 'Jun 1939'],
+                datasets: [{
+                    label: 'Getötete arabische Zivilisten',
+                    data: [10, 2, 18, 18, 43, 24, 33, 20],
+                    backgroundColor: 'rgba(220, 38, 38, 0.6)',
+                    borderColor: '#DC2626',
+                    borderWidth: 1
+                }]
+            };
+
+            const chartOptions = {
+                maintainAspectRatio: false,
+                responsive: true,
+                plugins: {
+                    legend: {
+                        position: 'top',
+                    },
+                    tooltip: {
+                        enabled: true
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true
+                    }
+                }
+            };
+
+            const popCtx = document.getElementById('populationChart').getContext('2d');
+            new Chart(popCtx, {
+                type: 'line',
+                data: populationData,
+                options: chartOptions
+            });
+
+            const attacksCtx = document.getElementById('attacksChart').getContext('2d');
+            new Chart(attacksCtx, {
+                type: 'bar',
+                data: attacksData,
+                options: chartOptions
+            });
+
+            const tabs = document.querySelectorAll('.tab-btn');
+            const tabPanes = document.querySelectorAll('.tab-pane');
+
+            tabs.forEach(tab => {
+                tab.addEventListener('click', () => {
+                    tabs.forEach(item => {
+                        item.classList.remove('active-tab');
+                        item.classList.remove('border-red-600');
+                        item.classList.add('text-stone-500', 'border-transparent');
+                    });
+                    tab.classList.add('active-tab');
+                    tab.classList.add('border-red-600');
+                    tab.classList.remove('text-stone-500', 'border-transparent');
+                    tab.classList.add('text-stone-600');
+                    
+                    const target = tab.getAttribute('data-tab');
+                    tabPanes.forEach(pane => {
+                        if (pane.id === `${target}-content`) {
+                            pane.classList.remove('hidden');
+                        } else {
+                            pane.classList.add('hidden');
+                        }
+                    });
+                });
+            });
+
+            const navLinks = document.querySelectorAll('.nav-link');
+            const sections = document.querySelectorAll('section[id]');
+
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        navLinks.forEach(link => {
+                            link.classList.remove('active');
+                            if (link.getAttribute('href').substring(1) === entry.target.id) {
+                                link.classList.add('active');
+                            }
+                        });
+                    }
+                });
+            }, { rootMargin: "-50% 0px -50% 0px" });
+
+            sections.forEach(section => {
+                observer.observe(section);
+            });
+        });
+
+        function openModal(modalId) {
+            const modal = document.getElementById(`${modalId}-modal`);
+            if (modal) {
+                modal.classList.remove('hidden');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        function closeModal(modalId) {
+            const modal = document.getElementById(`${modalId}-modal`);
+            if (modal) {
+                modal.classList.add('hidden');
+                document.body.style.overflow = 'auto';
+            }
+        }
+
+        window.onclick = function(event) {
+            if (event.target.classList.contains('modal')) {
+                const modalId = event.target.id.replace('-modal', '');
+                closeModal(modalId);
+            }
+        }
+    </script>
+</body>
+</html>
